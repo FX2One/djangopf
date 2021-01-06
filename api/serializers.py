@@ -10,6 +10,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             'title',
             'author'
         ]
+        
 
 
 
