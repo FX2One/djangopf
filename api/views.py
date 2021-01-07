@@ -10,8 +10,45 @@ from rest_framework import status
 from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.exceptions import APIException
+from rest_framework import generics
+from rest_framework import mixins
 
 # Create your views here.
+class GenericAPIView(
+    generics.GenericAPIView,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin):
+
+
+    serializer_class = ArticleSerializer
+    queryset = Article.objects.all()
+
+    lookup_field = 'id'
+
+    def get(self, request, id=None):
+
+        if id:
+            return self.retrieve(request)
+        else:
+            return self.list(request)
+
+    def post(self, request):
+        return self.create(request)
+
+    def put(self, request, id=None):
+        return self.update(request, id)
+
+    def delete(self, request, id):
+        return self.destroy(request, id)
+
+
+
+
+
+#class based view
 class ArticleAPIView(APIView):
     def get(self, request):
         articles = Article.objects.all()
@@ -32,6 +69,7 @@ class ArticleDetails(APIView):
             return Article.objects.get(pk=pk)
         except Article.DoesNotExist:
             raise Http404
+            #raise APIException("Article DO NOT EXIST")
 
     def get(self, request, pk):
         article = self.get_object(pk)
@@ -52,7 +90,7 @@ class ArticleDetails(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
+#function base view
 '''@api_view(['GET', 'POST'])
 def article_list(request):
     if request.method == 'GET':
