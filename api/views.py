@@ -19,12 +19,25 @@ from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
-class ArticleViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
+#Model ViewSet
+class ArticleViewSet(viewsets.ModelViewSet):
+
     serializer_class = ArticleSerializer
     queryset = Article.objects.all()
 
+#Generic ViewSet
+'''class ArticleViewSet(viewsets.GenericViewSet,
+                     mixins.ListModelMixin,
+                     mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.RetrieveModelMixin,
+                     mixins.DestroyModelMixin):
+
+    serializer_class = ArticleSerializer
+    queryset = Article.objects.all()'''
 
 
+#ViewSet and Routers
 '''class ArticleViewSet(viewsets.ViewSet):
 
         def list(self, request):
@@ -59,7 +72,7 @@ class ArticleViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Crea
 
         def destroy(self, request, pk=None):
             pass'''
-
+#Generic APIView + Mixins
 class GenericAPIView(
     generics.GenericAPIView,
     mixins.ListModelMixin,
@@ -68,6 +81,7 @@ class GenericAPIView(
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin):
 
+    #Authentications Session,Basic and Token
     #authentication_classes = [SessionAuthentication, BasicAuthentication]
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
