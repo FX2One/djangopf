@@ -12,8 +12,12 @@ from django.http import Http404
 from rest_framework.exceptions import APIException
 from rest_framework import generics
 from rest_framework import mixins
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 # Create your views here.
+
 class GenericAPIView(
     generics.GenericAPIView,
     mixins.ListModelMixin,
@@ -21,6 +25,11 @@ class GenericAPIView(
     mixins.UpdateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin):
+
+    #authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
 
 
     serializer_class = ArticleSerializer
